@@ -20,7 +20,7 @@
                     <archive>
                         <manifest>
                             <mainClass>
-                                ua.images.App
+                                App
                             </mainClass>
                         </manifest>
                     </archive>

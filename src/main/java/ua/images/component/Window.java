@@ -41,7 +41,8 @@ public class Window extends Canvas {
                     if (firstImageWidth == secondImageWidth && firstImageHeight == secondImageHeight)
                         f.doRecognize();
                     else
-                        JOptionPane.showMessageDialog(null, new JLabel("Make sure what images have equal size", JLabel.CENTER));
+                        JOptionPane.showMessageDialog(null, new JLabel("Make sure that images have equal size",
+                                JLabel.CENTER));
                 } else JOptionPane.showMessageDialog(null, new JLabel("Nothing to recognize", JLabel.CENTER));
 
 
@@ -54,7 +55,7 @@ public class Window extends Canvas {
                     }
                 } else if (c.getLabelFirstImage().getIcon() == null || c.getLabelSecondImage().getIcon() == null)
                     JOptionPane.showMessageDialog(null, new JLabel("Load images to recognize", JLabel.CENTER));
-                else JOptionPane.showMessageDialog(null, new JLabel("Recognize first", JLabel.CENTER));
+
             }
         });
 
