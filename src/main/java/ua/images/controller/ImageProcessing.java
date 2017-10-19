@@ -4,11 +4,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import ua.images.domain.Area;
 
-import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -19,33 +17,29 @@ import java.util.HashSet;
 public class ImageProcessing {
 
     protected Log log = LogFactory.getLog(getClass());
-    private String file = "src/main/resources/image1.png";
-    private String file1 = "src/main/resources/image2.png";
     private int width1;
     private int width2;
     private int height1;
     private int height2;
-    final private int minDistBetweenArea = 2;
+    private final int minDistBetweenArea = 2;
     private int[][] pict;
     private ArrayList<Area> areaArr = new ArrayList<Area>();
     private ArrayList<Area> expandedAreaArr = new ArrayList<Area>();
     private ArrayList<Area> finalAreaArr = new ArrayList<Area>();
+    BufferedImage img1;
+    BufferedImage img2;
 
-    public BufferedImage processImage(String file, String file1) {
-
-        BufferedImage img1 = null;
-        BufferedImage img2 = null;
-
-        try {
-            img1 = ImageIO.read(new File(file));
-            img2 = ImageIO.read(new File(file1));
-        } catch (IOException e) {
-        }
-        width1 = img1.getWidth();
-        width2 = img2.getWidth();
-        height1 = img1.getHeight();
-        height2 = img2.getHeight();
+    public ImageProcessing(BufferedImage img1, BufferedImage img2) {
+        this.img1=img1;
+        this.img2=img2;
+        this.width1 = img1.getWidth();
+        this.height1 = img1.getHeight();
+        this.width2 = img2.getWidth();
+        this.height2 = img2.getHeight();
         pict = new int[height1][width1];
+    }
+
+public BufferedImage processImage() {
 
         // output image
         BufferedImage outImg = new BufferedImage(width1, height1, BufferedImage.TYPE_INT_RGB);
@@ -125,6 +119,8 @@ public class ImageProcessing {
     }
 
     void buildExpandedArea() {
+
+        try {
         counterArea = 0;
         Area area = new Area();
         counterArea++;
@@ -153,6 +149,11 @@ public class ImageProcessing {
             }
         }
         finalAreaArr.add(area);
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, new JLabel("It seams that images are the same. Bye...", JLabel.CENTER));
+            System.exit(0);
+        }
     }
 
     private void expandArea() {
@@ -197,10 +198,7 @@ public class ImageProcessing {
 
     public void buildArea(int raw, int column, Area area) {
 
-        //if (pict[raw][column] >= 0) {
-        //   flag = false;
-        //   return;
-        //} else if (checking(raw, column)) {
+        try {
 
         if (checking(raw, column)) {
             ArrayList<ArrayList<Integer>> seq = new ArrayList();
@@ -257,6 +255,12 @@ public class ImageProcessing {
             }
             seq.clear();
         }
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, new JLabel("Images are too different. Bye...", JLabel.CENTER));
+            System.exit(0);
+        }
+
     }
 
     public boolean checking(int raw, int column) {
@@ -287,14 +291,6 @@ public class ImageProcessing {
             }
         }
         return outImg;
-    }
-
-    public void draw() {
-        try {
-            ImageIO.write(processImage(file, file1), "png", new File("output.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 
