@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashSet;
 
 /**
  * Created by Администратор on 15.10.2017.
@@ -108,11 +107,25 @@ public BufferedImage processImage() {
                     coordinates.add(coord);
                     coordinates.sort(new Comparator<ArrayList<Integer>>() {
                         public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
-                            if (o1.get(0) == o2.get(0)) return 0;
-                            else if (o1.get(0) > o2.get(0)) return 1;
-                            else return -1;
-                        }
-                    });
+
+                            Integer x1 = o1.get(0);
+                            Integer x2 = o2.get(0);
+                            Integer iComp = x1.compareTo(x2);
+
+                            if (iComp != 0) {
+                                return iComp;
+                            } else {
+                                Integer y1 = o1.get(1);
+                                Integer y2 = o2.get(1);
+                                return y1.compareTo(y2);
+                            }
+                        }});
+
+//                            if (o1.get(0) == o2.get(0)) return 0;
+//                            else if (o1.get(0) > o2.get(0)) return 1;
+//                            else return -1;
+//                        }
+//                    });
                 }
             }
         }
@@ -129,12 +142,13 @@ public BufferedImage processImage() {
         area.setLeftUpCornerY(height1);
         area.setRightDownCornerY(0);
 
-        for (int z =0; z < coordinates.size()-1; z++){
+        for (int z =0;z< coordinates.size()-1; z++){
 
             area.setLeftUpCornerY(Math.min(coordinates.get(z).get(1), area.getLeftUpCornerY()));
             area.setRightDownCornerY(Math.max(coordinates.get(z).get(1), area.getRightDownCornerY()));
 
-            if (coordinates.get(z+1).get(0)-coordinates.get(z).get(0)<=1){
+            if (coordinates.get(z+1).get(0)-coordinates.get(z).get(0)<=1 && coordinates.get(z+1).get(1)-coordinates
+                    .get(z).get(1)<=1){
                 area.setRightDownCornerX(coordinates.get(z+1).get(0));
                 area.setLeftUpCornerY(Math.min(coordinates.get(z+1).get(1), area.getLeftUpCornerY()));
                 area.setRightDownCornerY(Math.max(coordinates.get(z+1).get(1), area.getRightDownCornerY()));
@@ -166,9 +180,6 @@ public BufferedImage processImage() {
             expandedAreaArr.add(area);
         }
     }
-
-
-    private HashSet<HashSet<Integer>> numberMergedAreasArr = new HashSet<HashSet<Integer>>();
 
 
     int counterArea = 0;
